@@ -1,0 +1,5 @@
+{
+  "ext": "ts",
+  "watch": ["./config/webpack.config.ts","./config/webpack.dev.ts"],
+  "exec": "yarn dev"
+}
