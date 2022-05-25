@@ -5,11 +5,18 @@ const root = document.getElementById("root");
 import zhCN from "antd/lib/locale/zh_CN";
 import { HashRouter } from "react-router-dom";
 import App from "./App";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import store from "./store";
+
+// const store = createStore();
 ReactDOM.render(
-  <HashRouter>
-    <ConfigProvider locale={zhCN}>
-      <App></App>
-    </ConfigProvider>
-  </HashRouter>,
+  <Provider store={store}>
+    <HashRouter>
+      <ConfigProvider locale={zhCN}>
+        <App></App>
+      </ConfigProvider>
+    </HashRouter>
+  </Provider>,
   root
 );

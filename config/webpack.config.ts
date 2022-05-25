@@ -5,6 +5,7 @@ import path from "path";
 import webpack from "webpack";
 import { WebpackConfigType } from "./webpack";
 import HappyPack from "happypack";
+import theme from "./theme";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 const config: WebpackConfigType = {
@@ -13,6 +14,12 @@ const config: WebpackConfigType = {
     path: path.join(__dirname, "../dist"),
     filename: "js/[name].[chunkhash:8].js",
   },
+  externals: isDevelopment
+    ? {}
+    : {
+        react: "react",
+        "react-dom": "react-dom",
+      },
   resolve: {
     extensions: [".js", ".ts", ".jsx", ".tsx"],
     alias: {
@@ -24,6 +31,7 @@ const config: WebpackConfigType = {
       {
         test: /\.(js|ts|jsx|tsx)$/,
         exclude: /node_modules/,
+
         use: [
           {
             loader: "babel-loader",
@@ -45,6 +53,20 @@ const config: WebpackConfigType = {
           // "style-loader",
           "css-loader",
           "postcss-loader",
+          {
+            loader: "less-loader",
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+                modifyVars: {
+                  "primary-color": "#f5222d",
+                  // "primary-color": "#1DA57A",
+                  // "link-color": "#1DA57A",
+                  // "border-radius-base": "2px",
+                },
+              },
+            },
+          },
         ],
       },
       {
@@ -69,7 +91,17 @@ const config: WebpackConfigType = {
           "postcss-loader",
           {
             loader: "less-loader",
-            options: { lessOptions: { javascriptEnabled: true } },
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+                modifyVars: {
+                  // ...theme,
+                  "primary-color": "#f5222d",
+                  // "link-color": "#1DA57A",
+                  // "border-radius-base": "2px",
+                },
+              },
+            },
           },
         ],
       },
@@ -77,15 +109,31 @@ const config: WebpackConfigType = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    // new HappyPack({
+    //   id: "babel", // 唯一标识符
+    //   // 使用的loader配置改写到happypack的配置项中
+    //   use: [
+    //     {
+    //       loader: "babel-loader",
+    //       options: {
+    //         plugins: [isDevelopment ? "react-refresh/babel" : ""].filter(
+    //           Boolean
+    //         ),
+    //         // cacheDirectory: true,
+    //       },
+    //     },
+    //   ],
+    // }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "../src/pages/index.html"),
       filename: "index.html",
       inject: "body",
+      // cdn: {
+      //   js: [
+      //     "https://cdn.bootcdn.net/ajax/libs/react-is/17.0.2/cjs/react-is.production.min.js",
+      //   ],
+      // },
     }),
-    isDevelopment &&
-      new HappyPack({
-        loaders: ["babel-loader"],
-      }),
     new MiniCssExtractPlugin({
       filename: "static/styles/[name].css",
       ignoreOrder: false,

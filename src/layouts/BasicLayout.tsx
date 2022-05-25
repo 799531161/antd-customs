@@ -52,6 +52,7 @@ const BasicLayout: FC<any> = () => {
           />
         </div>
         <Menu
+          selectedKeys={keyPath}
           theme="dark"
           defaultSelectedKeys={["1"]}
           mode="inline"

@@ -8,5 +8,12 @@
   </head>
   <body>
     <div id="root"></div>
+    <% for (let i in htmlWebpackPlugin.options.cdn &&
+    htmlWebpackPlugin.options.cdn.js) { %>
+    <script
+      type="text/javascript"
+      src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"
+    ></script>
+    <% } %>
   </body>
 </html>

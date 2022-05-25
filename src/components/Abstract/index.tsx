@@ -10,15 +10,19 @@ interface DataSourceType {
 
 interface State {
   dataSource: DataSourceType[];
+  value: any;
 }
 
-interface Props extends SelectProps {}
+interface Props extends SelectProps {
+  onChange?: (e: any) => void;
+}
 
 abstract class Animal extends Component<Props, State> {
   public abstract getData(): DataSourceType[];
 
   state: Readonly<State> = {
     dataSource: [],
+    value: undefined,
   };
 
   public componentDidMount() {
@@ -37,7 +41,13 @@ abstract class Animal extends Component<Props, State> {
   };
 
   onSelect = (e) => {
-    console.log(e);
+    const { onChange } = this.props;
+    this.setState({
+      value: e,
+    });
+    if (onChange) {
+      onChange(e);
+    }
   };
 
   onSearch = (e) => {
@@ -52,7 +62,7 @@ abstract class Animal extends Component<Props, State> {
         style={{ width: "100%" }}
         onChange={this.onChange}
         onSelect={this.onSelect}
-        onSearch={this.onSearch}
+        // onSearch={this.onSearch}
       >
         {dataSource.map((item) => {
           return (
